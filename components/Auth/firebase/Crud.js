@@ -1,7 +1,11 @@
 import { db } from "./firebase_config";
-import { doc, updateDoc, setDoc, getDoc, deleteDoc  } from "firebase/firestore";
+import { doc, updateDoc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
+import { getAuth, deleteUser } from "firebase/auth";
 import Item from "../../../model/Item";
 import User from "../../../model/User";
+import { AuthContext } from "../../../context/auth-context";
+import { auth } from "./firebase_config";
+import { useContext} from 'react'
 
 
 // Firestore User converter
@@ -130,6 +134,18 @@ export const editUser = async (email, phoneNum, uid) => {
 
 }
 
-export const deleteUser = async (uid) => {
+export const deleteCurrentUser = async (uid) => {
+
+
+    
+console.log("DELETECURRENT USER")
+    const user = auth.currentUser;
+    console.log(user);
+    deleteUser(user).then(() => {
+        console.log("object deleted")
+        
+    }).catch((error) => {
+        console.log("ERROR "+error)
+    });
     await deleteDoc(doc(db, "users", uid));
 }

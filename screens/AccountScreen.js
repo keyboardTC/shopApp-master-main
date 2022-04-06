@@ -5,7 +5,7 @@ import { AuthContext } from '../context/auth-context';
 import Button from '../components/ui/Button';
 import { getUser } from '../components/Auth/firebase/Crud';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
-import { deleteUser } from '../components/Auth/firebase/Crud';
+import { deleteCurrentUser } from '../components/Auth/firebase/Crud';
 
 const AccountScreen = ({navigation, route}) => {
   const authCtx = useContext(AuthContext);
@@ -18,11 +18,7 @@ const AccountScreen = ({navigation, route}) => {
     })();
   },[authCtx, navigation]);
 
-  if (!user) {
-    console.log("locations are loading");
-    return <LoadingOverlay message='Loading...'/>
-  }
-console.log(`user = > ${user.address}`)
+  // console.log(`user = > ${user.address}`)
   const editProfileHandler = () =>{
     navigation.navigate('EditeProfile',{user:user});
   }
@@ -30,9 +26,20 @@ console.log(`user = > ${user.address}`)
   const deleteProfileHandler = async () => {
       console.log("Delete Button Clicked")
       console.log(user.uid)
-      await deleteUser(user.uid)
+      setUser(null);
+
+      await deleteCurrentUser(user.uid)
+      .then(
+        authCtx.logout
+      );
+      setUser(fetchUser);
       //need to navigate to Login Screen Pending
-      //navigation.navigate("Login")  
+      // navigation.navigate("Login")  
+  }
+  
+  if (!user) {
+    console.log("locations are loading");
+    return <LoadingOverlay message='Loading...'/>
   }
 
   return (
