@@ -9,6 +9,7 @@ const userConverter = {
     toFirestore: (user) => {
         return {
             uid : user.uid,
+            name: user.name,
             email : user.email,
             phoneNum : user.phoneNum,
             address : user.address
@@ -16,7 +17,7 @@ const userConverter = {
     },
     fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options);
-        return new User(data.uid, data.email, data.phoneNum, data.address);
+        return new User(data.uid, data.name, data.email, data.phoneNum, data.address);
     }
 };
 
@@ -97,9 +98,9 @@ const itemConverter = {
 //     await deleteDoc(doc(db, "locations", id));
 // }
 
-export const addUser = async ({uid, email, phoneNum, address}) => {
+export const addUser = async ({uid, name, email, phoneNum, address}) => {
     const ref = doc(db, "users", uid).withConverter(userConverter);
-    await setDoc(ref, new User(uid, email, phoneNum, address));
+    await setDoc(ref, new User(uid, name, email, phoneNum, address));
 }
 
 export const getUser = async (uid) => {
@@ -123,7 +124,8 @@ export const editUser = async (email, phoneNum, uid) => {
 // Update the timestamp field with the value from the server
     await updateDoc(docRef, {
         email : email,
-        phoneNum : phoneNum
+        phoneNum : phoneNum,
+        updated: (new Date()).toISOString(),
     });
 
 }

@@ -23,7 +23,8 @@ const CartScreen = ({navigation, route}) => {
     },[cartCtx.items, navigation])
 
     const backBtnHandler = () =>{
-        navigation.goBack();
+        //navigation.goBack();
+        navigation.navigate("Checkout")
     }
     const saveCartBtnHandler = () =>{
         // let value = cartItems

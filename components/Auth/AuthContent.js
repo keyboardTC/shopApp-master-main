@@ -10,6 +10,7 @@ function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
   const navigation = useNavigation();
 
   const [credentialsInvalid, setCredentialsInvalid] = useState({
+    name: false,
     email: false,
     password: false,
     confirmPassword: false,
@@ -26,11 +27,12 @@ function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
   }
 
   function submitHandler(credentials) {
-    let { email, password, confirmPassword, phoneNum, address } = credentials;
+    let { name, email, password, confirmPassword, phoneNum, address } = credentials;
 
     email = email.trim();
     password = password.trim();
 
+    const nameIsValid = name.length > 12
     const emailIsValid = email.includes('@');
     const passwordIsValid = password.length > 6;
     const phoneNumIsValid = phoneNum.length === 10
@@ -40,10 +42,11 @@ function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
     if (
       !emailIsValid ||
       !passwordIsValid  ||
-      (!isLogin && !passwordsAreEqual && !phoneNumIsValid && !addressIsValid)
+      (!isLogin && !passwordsAreEqual && !nameIsValid && !phoneNumIsValid && !addressIsValid)
     ) {
       Alert.alert('Invalid input', 'Please check your entered credentials.');
       setCredentialsInvalid({
+        name: !nameIsValid,
         email: !emailIsValid,
         password: !passwordIsValid,
         confirmPassword: !passwordIsValid || !passwordsAreEqual,
@@ -56,7 +59,7 @@ function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
     if (isLogin) {
       signInHandler({ email, password });
     }else{
-      onAuthenticate({ email, password, phoneNum, address });
+      onAuthenticate({ name, email, password, phoneNum, address });
     }
   }
 

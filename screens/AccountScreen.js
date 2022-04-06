@@ -5,7 +5,7 @@ import { AuthContext } from '../context/auth-context';
 import Button from '../components/ui/Button';
 import { getUser } from '../components/Auth/firebase/Crud';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
-
+import { deleteUser } from '../components/Auth/firebase/Crud';
 
 const AccountScreen = ({navigation, route}) => {
   const authCtx = useContext(AuthContext);
@@ -27,6 +27,14 @@ console.log(`user = > ${user.address}`)
     navigation.navigate('EditeProfile',{user:user});
   }
 
+  const deleteProfileHandler = async () => {
+      console.log("Delete Button Clicked")
+      console.log(user.uid)
+      await deleteUser(user.uid)
+      //need to navigate to Login Screen Pending
+      //navigation.navigate("Login")  
+  }
+
   return (
     <>
       <View style={styles.mainContainer}>
@@ -35,7 +43,7 @@ console.log(`user = > ${user.address}`)
           </View>
           <View>
             <View>
-              <Text style={styles.text}>Name</Text>
+              <Text style={styles.text}>{user.name}</Text>
             </View>
             <View>
               <Text style={styles.text}>{user.address}</Text>
@@ -50,7 +58,7 @@ console.log(`user = > ${user.address}`)
       </View>
       <View style={styles.btnContainer}>
         <Button onPress={editProfileHandler}>Edit profile</Button>
-        <Button>Delete profile</Button>
+        <Button onPress={deleteProfileHandler}>Delete profile</Button>
       </View>
     </>
   )

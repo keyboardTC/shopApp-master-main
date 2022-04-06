@@ -14,7 +14,7 @@ function SignupScreen() {
   let userID = "";
 
 
-  const signupHandler = async ({email, password, phoneNum, address}) => {
+  const signupHandler = async ({name, email, password, phoneNum, address}) => {
 
     setIsloaded(true);
    await createUserWithEmailAndPassword(auth, email, password)
@@ -31,9 +31,10 @@ function SignupScreen() {
       return
     })
     
-    console.log("User ID set === >"+userID+",Email "+email+",phoneNum "+phoneNum+",address "+address);
+    console.log("User ID set === >"+userID+", Name "+name+", Email "+email+", phoneNum "+phoneNum+", address "+address);
     const newUser = {
       uid: userID,
+      name: name,
       email: email,
       phoneNum: phoneNum,
       address: address

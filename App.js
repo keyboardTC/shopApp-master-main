@@ -19,6 +19,7 @@ import AccountScreen from './screens/AccountScreen'
 import ItemsContextProvider from './context/items-context';
 import ItemDetailsScreen from './screens/ItemDetailsScreen';
 import EdithProfileScreen from './screens/EdithProfileScreen';
+import CheckoutScreen from './screens/CheckoutScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -47,9 +48,9 @@ function DrawerNavigator() {
         title: 'Filters',
       }}
     />
-    <Drawer.Screen name='Availability' component={ShopScreen}/>
-    <Drawer.Screen name='Low - High' component={ShopScreen}/>
-    <Drawer.Screen name='A-z' component={ShopScreen}/>
+    <Drawer.Screen name='Availability' initialParams={{filter: 'Available'}} component={ShopScreen}/>
+    <Drawer.Screen name='Low - High Price' initialParams={{filter: 'LowHigh'}} component={ShopScreen}/>
+    <Drawer.Screen name='A-Z' initialParams={{filter: 'AToZ'}} component={ShopScreen}/>
     {/* <Drawer.Screen name='AccountScreen' component={AccountScreen}/> */}
   </Drawer.Navigator>
 }
@@ -108,6 +109,11 @@ function AuthenticatedStack() {
       />
       <Stack.Screen name="MyCart" component={CartScreen}/>
       <Stack.Screen name="ItemDetails" component={ItemDetailsScreen}/>
+      <Stack.Screen name="Checkout" component={CheckoutScreen}
+              options={{
+                title: 'Payment Details'
+              }}
+      />
       <Stack.Screen name="EditeProfile" component={EdithProfileScreen}
               options={{
                   title: 'Edit Profile',

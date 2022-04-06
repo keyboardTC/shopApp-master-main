@@ -19,10 +19,15 @@ const EdithProfileScreen = ({navigation, route}) => {
     function addressUpdateValue(value) {
         setemailValue(value)
     }
-    function saveBtnHandler(value) {
-        console.log("email => "+email)
-        console.log("phoneNum => "+phoneNum)
-        editUser(email,phoneNum, uid)
+    // function saveBtnHandler(value) {
+    //     console.log("email => "+email)
+    //     console.log("phoneNum => "+phoneNum)
+    //     //await editUser(email,phoneNum, uid)
+    // }
+    const saveBtnHandler = async () => {
+        console.log("Email => "+email)
+        console.log("PhoneNum => "+phoneValue)
+        await editUser(email, phoneValue, uid)
     }
   return (
     <View style={styles.inputContainer}>

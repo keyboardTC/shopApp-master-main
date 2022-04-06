@@ -5,7 +5,9 @@ import { ItemsContext } from '../context/items-context';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 
-function ShopScreen({navigation, route}) {
+function ShopScreen(props) {
+
+  const {navigation, route} = props;
 
   const [isloaded, setIsloaded] = useState(false);
   const ItemsArr = useContext(ItemsContext);
@@ -14,18 +16,30 @@ function ShopScreen({navigation, route}) {
     // Make Api call
     (async () =>{
       const apiURL = "https://gist.githubusercontent.com/skd09/8d8a685ffbdae387ebe041f28384c13c/raw/26e97cec1e18243e3d88c90d78d2886535a4b3a6/menu.json"
-      console.log(apiURL)
+      //console.log(apiURL)
       setIsloaded(true);
       await fetch(apiURL)
       .then( (response) => response.json().then( (json) => { 
-        ItemsArr.items = json;
+        console.log("Apna leng", json.length)
+        if(route.params?.filter === 'Available') {
+          ItemsArr.items = json.filter(k => k.Available > 0);
+        } else if (route.params?.filter === 'LowHigh') {
+          ItemsArr.items = json.sort((a,b) => a.Price - b.Price );
+        }
+        else if(route.params?.filter === 'AToZ') {
+          ItemsArr.items = json.sort((a,b) => a.Title < b.Title ? -1 : a.Title > b.Title ? 1 : 0)
+        }
+         else {
+          ItemsArr.items = json;
+        }
+        console.warn(route.params?.filter);       
         console.log("Items context => "+ItemsArr.items.length);
       }) 
       .catch( (error) => {console.error(error); })
       )
       setIsloaded(false);
     })();
-  }, [ItemsArr, navigation]);
+  }, [ItemsArr, navigation, route?.params]);
 
   if (isloaded) {
     console.log("locations are loading");
@@ -33,19 +47,19 @@ function ShopScreen({navigation, route}) {
   }
 
   const renderItem = ({ item }) => (
-    
     <Pressable onPress={()=>{
       console.log("ID to be sent "+item.Id)
       navigation.navigate('ItemDetails', {itemId: item.Id})
     }}>
       <View style={styles.listItem}>
         {/* <Text style = {styles.title}>Category: {item.Category}</Text>  */}
-        <Text>Flat List {item.Id}</Text>
+        
         <Text>{item.Title}</Text>
         <Image style={styles.imgMenu} source = { {uri: item.Image} }/>
+        <Text>$ {item.Price}</Text>
+        <Text>Ratings: {item.Ratings}</Text>
       </View>
     </Pressable>
-
   );
 
 
