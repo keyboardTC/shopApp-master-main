@@ -135,9 +135,6 @@ export const editUser = async (email, phoneNum, uid) => {
 }
 
 export const deleteCurrentUser = async (uid) => {
-
-
-    
 console.log("DELETECURRENT USER")
     const user = auth.currentUser;
     console.log(user);
