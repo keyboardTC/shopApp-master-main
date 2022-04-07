@@ -31,7 +31,7 @@ function TapNav() {
   return (
       <Tab.Navigator
         screenOptions={ ({route}) => ({
-            "tabBarActiveTintColor": "orangered",
+            "tabBarActiveTintColor": "#610440",
             "tabBarInactiveTintColor": "gray",
             "tabBarStyle": [
                 {
@@ -71,7 +71,15 @@ function TapNav() {
 }
 
 function DrawerNavigator() {
-  return <Drawer.Navigator>
+  return <Drawer.Navigator 
+       screenOptions={{
+         headerTintColor: '#610440',
+         drawerActiveBackgroundColor: '#610440',
+         drawerActiveTintColor: 'white',
+         drawerStyle:{backgroundColor: '#fff2f2'}
+       }}
+
+   >
     <Drawer.Screen name='ShopScreen' component={ShopScreen}
       options={{
         title: 'Filters',

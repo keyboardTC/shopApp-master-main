@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Alert, StyleSheet, View, ScrollView, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
@@ -8,8 +8,13 @@ import { Colors } from '../../constants/styles';
 
 function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
   const navigation = useNavigation();
-  //let cityName
   const [cityName, setCityName] = useState('')
+
+  useEffect ( () => {
+    (async () =>{
+      console.log("Auth Content component");
+    })();
+  },[navigation]);
 
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     name: false,
@@ -19,17 +24,6 @@ function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
     phoneNum: false,
     address: false
   });
-
-  // const latLongDelta = {
-  //   latitudeDelta: 0.0922,
-  //   longitudeDelta: 0.0421,
-  // }
-
-  // const [region, setRegion] = useState({
-  //   latitude: 37.78825,
-  //   longitude: -122.4324,
-  //   ...latLongDelta
-  // })
 
   async function switchAuthModeHandler() {
 
@@ -43,22 +37,22 @@ function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
         { cancelable: false }
       )
     }
-    let { coords } = await Location.getCurrentPositionAsync(); // is to get current position coords. - lat long position details
-    console.log("Auth Content Screen Location")
-    console.log(coords)
+    // let { coords } = await Location.getCurrentPositionAsync(); // is to get current position coords. - lat long position details
+    // console.log("Auth Content Screen Location")
+    // console.log(coords)
     
-    const {latitude, longitude} = coords
-    let response = await Location.reverseGeocodeAsync({
-      latitude:latitude,
-      longitude:longitude,
-    });
+    // const {latitude, longitude} = coords
+    // let response = await Location.reverseGeocodeAsync({
+    //   latitude:latitude,
+    //   longitude:longitude,
+    // });
 
-    console.log("after reverse geocode value here ==", {
-      response
-    });
+    // console.log("after reverse geocode value here ==", {
+    //   response
+    // });
 
-    setCityName(response[0].city || response[0].region || 'unnamed')
-    console.log("Auth Content " +cityName)   
+    // setCityName(response[0].city || response[0].region || 'unnamed')
+    // console.log("Auth Content " +cityName)   
 
 
     if (isLogin) {
