@@ -70,7 +70,7 @@ function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
         style={styles.rootScreen}
         imageStyle={styles.backgroundImage}
       >
-        <ScrollView style={styles.authContent}>
+        <View style={styles.authContent}>
             <AuthForm
               isLogin={isLogin}
               onSubmit={submitHandler}
@@ -81,7 +81,7 @@ function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
                 {isLogin ? 'Create a new user' : 'Log in instead'}
               </FlatButton>
             </View>
-        </ScrollView>
+        </View>
       </ImageBackground>
   );
 }
