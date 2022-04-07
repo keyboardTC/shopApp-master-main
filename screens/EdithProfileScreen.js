@@ -7,17 +7,18 @@ import { editUser } from '../components/Auth/firebase/Crud';
 
 const EdithProfileScreen = ({navigation, route}) => {
     const {email} = route.params.user;
+    const {address} = route.params.user;
     const {phoneNum} = route.params.user;
     const {uid} = route.params.user;
     const [phoneValue, setPhoneValue] = useState(phoneNum); 
-    const [emailValue, setemailValue] = useState(email); 
+    const [addressValue, setAddressValue] = useState(address); 
     const authCtx = useContext(AuthContext);
 
     function phoneUpdateValue(value) {
         setPhoneValue(value)
     }
     function addressUpdateValue(value) {
-        setemailValue(value)
+        setAddressValue(value)
     }
     // function saveBtnHandler(value) {
     //     console.log("email => "+email)
@@ -25,14 +26,14 @@ const EdithProfileScreen = ({navigation, route}) => {
     //     //await editUser(email,phoneNum, uid)
     // }
     const saveBtnHandler = async () => {
-        console.log("Email => "+email)
+        console.log("Email => "+addressValue)
         console.log("PhoneNum => "+phoneValue)
-        await editUser(email, phoneValue, uid)
+        await editUser(addressValue, phoneValue, uid)
         authCtx.toggleChange()
     }
   return (
     <View style={styles.inputContainer}>
-        <Text>Enter New Info Details</Text>
+        <Text style={styles.heading}>Enter New Info Details</Text>
         <View style={styles.emailContainer}>
             <Text style={styles.btext_style}>
                 Phone Number
@@ -47,13 +48,12 @@ const EdithProfileScreen = ({navigation, route}) => {
         </View>
         <View>
             <Text style={styles.btext_style}>
-                Email 
+                Address 
             </Text> 
             <TextInput style={styles.inputStyle}
                 onChangeText={addressUpdateValue}
-                value={emailValue}
-                placeholder='Enter New Email ddress'
-                keyboardType="email-address"
+                value={addressValue}
+                placeholder='Enter New Address' 
             />
         </View>
         <Button onPress={saveBtnHandler}>save</Button>
@@ -91,6 +91,10 @@ const styles = StyleSheet.create({
         shadowRadius:8,
         height:400,
       },
+    heading:{
+        fontSize: 18,
+        fontWeight:"bold",
+    },  
     btext_style:{
         fontWeight: 'bold'
     },

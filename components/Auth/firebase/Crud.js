@@ -121,12 +121,12 @@ export const getUser = async (uid) => {
     }
 }
 
-export const editUser = async (email, phoneNum, uid) => {
+export const editUser = async (address, phoneNum, uid) => {
     const docRef = doc(db, 'users', uid);
 
 // Update the timestamp field with the value from the server
     await updateDoc(docRef, {
-        email : email,
+        address : address,
         phoneNum : phoneNum,
         updated: (new Date()).toISOString(),
     });

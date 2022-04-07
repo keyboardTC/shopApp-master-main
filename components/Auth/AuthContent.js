@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Alert, StyleSheet, View, ScrollView, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import * as Location from 'expo-location';
 import FlatButton from '../ui/FlatButton';
 import AuthForm from './AuthForm';
 import { Colors } from '../../constants/styles';
 
 function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
   const navigation = useNavigation();
+  //let cityName
+  const [cityName, setCityName] = useState('')
 
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     name: false,
@@ -18,9 +20,49 @@ function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
     address: false
   });
 
-  function switchAuthModeHandler() {
+  // const latLongDelta = {
+  //   latitudeDelta: 0.0922,
+  //   longitudeDelta: 0.0421,
+  // }
+
+  // const [region, setRegion] = useState({
+  //   latitude: 37.78825,
+  //   longitude: -122.4324,
+  //   ...latLongDelta
+  // })
+
+  async function switchAuthModeHandler() {
+
+    let {status} = await Location.requestForegroundPermissionsAsync();
+
+    if (status !== "granted") {
+      Alert.alert(
+        "Permission not granted",
+        "Allow the app to use location service",
+        [{ text: "ok"}],
+        { cancelable: false }
+      )
+    }
+    let { coords } = await Location.getCurrentPositionAsync(); // is to get current position coords. - lat long position details
+    console.log("Auth Content Screen Location")
+    console.log(coords)
+    
+    const {latitude, longitude} = coords
+    let response = await Location.reverseGeocodeAsync({
+      latitude:latitude,
+      longitude:longitude,
+    });
+
+    console.log("after reverse geocode value here ==", {
+      response
+    });
+
+    setCityName(response[0].city || response[0].region || 'unnamed')
+    console.log("Auth Content " +cityName)   
+
+
     if (isLogin) {
-      navigation.replace('Signup');
+      navigation.replace('Signup');   
     } else {
       navigation.replace('Login');
     }
@@ -75,6 +117,7 @@ function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
               isLogin={isLogin}
               onSubmit={submitHandler}
               credentialsInvalid={credentialsInvalid}
+              cityName = {cityName}
             />
             <View style={styles.buttons}>
               <FlatButton onPress={switchAuthModeHandler}>
