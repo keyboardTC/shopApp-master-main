@@ -6,15 +6,16 @@ import FlatButton from '../ui/FlatButton';
 import AuthForm from './AuthForm';
 import { Colors } from '../../constants/styles';
 
-function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
+function AuthContent({ isLogin, onAuthenticate, signInHandler, cityName = '' }) {
   const navigation = useNavigation();
-  const [cityName, setCityName] = useState('')
 
   useEffect ( () => {
     (async () =>{
       console.log("Auth Content component");
     })();
   },[navigation]);
+
+  console.log("Auth Contetnt city", cityName)
 
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     name: false,
@@ -26,34 +27,6 @@ function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
   });
 
   async function switchAuthModeHandler() {
-
-    let {status} = await Location.requestForegroundPermissionsAsync();
-
-    if (status !== "granted") {
-      Alert.alert(
-        "Permission not granted",
-        "Allow the app to use location service",
-        [{ text: "ok"}],
-        { cancelable: false }
-      )
-    }
-    // let { coords } = await Location.getCurrentPositionAsync(); // is to get current position coords. - lat long position details
-    // console.log("Auth Content Screen Location")
-    // console.log(coords)
-    
-    // const {latitude, longitude} = coords
-    // let response = await Location.reverseGeocodeAsync({
-    //   latitude:latitude,
-    //   longitude:longitude,
-    // });
-
-    // console.log("after reverse geocode value here ==", {
-    //   response
-    // });
-
-    // setCityName(response[0].city || response[0].region || 'unnamed')
-    // console.log("Auth Content " +cityName)   
-
 
     if (isLogin) {
       navigation.replace('Signup');   

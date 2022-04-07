@@ -3,7 +3,6 @@ import { TextInput } from 'react-native-gesture-handler'
 import {useState, useContext} from 'react'
 import Button from '../components/ui/Button'
 import Input from '../components/Auth/Input'
-//import DatePicker from 'react-native-datepicker';
 
 const CheckoutScreen = ( {navigation,route}) => {
 
@@ -18,7 +17,11 @@ const CheckoutScreen = ( {navigation,route}) => {
     const [birthdate, setBirthDate] = useState();
 
     const placeOrder = () => {
-        console.log("Order Place")
+        
+        const UserDate = (new Date('20' + cardExpiryDate.substring(2), (cardExpiryDate.substring(0, 2) - 1))).getTime();
+        const date = (new Date()).getTime();
+        const currentDate = cardExpiryDate
+        
         if (name == ''){            
             alert("Name cannot be empty")
             return
@@ -32,15 +35,15 @@ const CheckoutScreen = ( {navigation,route}) => {
             alert("Shipping Address cannot be empty")
             return
         }else if (cardName == ''){
-            
             alert("Credit Card Name cannot be empty")
             return
         }else if (cardNumber == '' || cardNumber.length < 16){
             console.log("Card")
             alert("Credit Card Number must be 16 Digits")
             return
-        }else if(cardExpiryDate == '') {
-            console.log("Card")
+        }else if(cardExpiryDate == '' || UserDate < date) {
+            alert("Expiry Date cannot be past date")
+            return
         }else if(cardCVV == '' || cardCVV.length < 3){
             alert("CVV Number must be 3 Digits")
             return
@@ -109,37 +112,7 @@ const CheckoutScreen = ( {navigation,route}) => {
                 maxLength={4}
                 placeholder='Expiry MMYY'            
             />
-            {/* <DatePicker
-                onDateChange = { (dob) => {setBirthDate(dob);}}
-                date = {birthdate}
-                placeholder = "select date"
-                format="DD/MM/YYYY"
-                mode="date"
-                minDate="01-01-1900"
-                maxDate="31-12-2002"
-                confirmBtnText="Select"
-                cancelBtnText="Leave It"
-                customStyles={ {
-                    dateIcon: {
-                        position: 'absolute',
-                        right: -5,
-                        top: 4,
-                        marginLeft: 0,
-                    },
-                    placeholderText:{
-                        fontSize: 18,
-                        color: 'gray',
-                    },
-                    dateText:{
-                        fontSize: 18,
-                        color: 'red',
-                    },
-                    dateInput:{
-                        borderColor: 'red',
-                        alignItems: 'flex-start'
-                    }
-                } }
-            /> */}
+
             <TextInput
                 style={styles.inputStyle}
                 onChangeText={setCardCVV}

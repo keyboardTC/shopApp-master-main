@@ -12,7 +12,6 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid, cityName }) {
   const [enteredPassword, setEnteredPassword] = useState('');
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState('');
 
-  console.log("Receive Address from Auth Form " + cityName)
   const {
     name: nameIsInValid,
     email: emailIsInvalid,
