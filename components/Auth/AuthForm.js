@@ -4,14 +4,15 @@ import { StyleSheet, View } from 'react-native';
 import Button from '../ui/Button';
 import Input from './Input';
 
-function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
+function AuthForm({ isLogin, onSubmit, credentialsInvalid, cityName }) {
   const [enteredName, setEnteredName] = useState('');
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredPhoneNum, setEnteredPhoneNum] = useState('');
-  const [enteredAddress, setEnteredAddress] = useState('');
+  const [enteredAddress, setEnteredAddress] = useState(cityName);
   const [enteredPassword, setEnteredPassword] = useState('');
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState('');
 
+  console.log("Receive Address from Auth Form " + cityName)
   const {
     name: nameIsInValid,
     email: emailIsInvalid,

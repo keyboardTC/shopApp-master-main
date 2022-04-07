@@ -46,20 +46,21 @@ const AccountScreen = ({navigation, route}) => {
     <>
       <View style={styles.mainContainer}>
           <View style={styles.imgContainer}>
-            <Image/>
+            <Image style={styles.image}
+            source={require('../assets/avatar.jpg')}/>
           </View>
           <View>
             <View>
-              <Text style={styles.text}>{user.name}</Text>
+              <Text style={styles.text}>Name: {user.name}</Text>
             </View>
             <View>
-              <Text style={styles.text}>{user.address}</Text>
+              <Text style={styles.text}>Email: {user.email}</Text>
             </View>
             <View>
-              <Text style={styles.text}>{user.email}</Text>
+              <Text style={styles.text}>Address: {user.address}</Text>
             </View>
             <View>
-              <Text style={styles.text}>{user.phoneNum}</Text>
+              <Text style={styles.text}>Contact No: {user.phoneNum}</Text>
             </View>
           </View>
       </View>
@@ -77,15 +78,20 @@ const styles = StyleSheet.create({
   mainContainer:{
     flexDirection:'row',
     backgroundColor:'#ccc',
-    padding:50,
-    margin:30,
+    padding:25,
+    margin:20,
     justifyContent:'flex-start'
   },
   imgContainer:{
     height:80,
     width:100,
     backgroundColor:'yellow',
-    marginRight:20,
+    marginRight:5,
+  },
+  image:{
+    marginRight:5,
+    width: 100,
+    height: 80,
   },
   btnContainer:{
     flexDirection:'row',
@@ -96,7 +102,7 @@ const styles = StyleSheet.create({
     // margin:30,
   },
   text:{
-    fontSize:20,
-    margin:10
+    fontSize:16,
+    margin:5,
   }
 })

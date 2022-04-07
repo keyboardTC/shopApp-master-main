@@ -11,6 +11,7 @@ const CheckoutScreen = ( {navigation,route}) => {
     const [number, setNumber] = useState(0)
     const [bAddress, setBAddress] = useState('')
     const [sAddress, setSAddress] = useState('')
+    const [cardName, setCardName] = useState('')
     const [cardNumber, setCardNum] = useState(0)
     const [cardExpiryDate, setCardExpiryDate] = useState('')
     const [cardCVV, setCardCVV] = useState(0)
@@ -19,16 +20,20 @@ const CheckoutScreen = ( {navigation,route}) => {
     const placeOrder = () => {
         console.log("Order Place")
         if (name == ''){            
-            alert("Name Cannot be Empty")
+            alert("Name cannot be empty")
             return
         }else if (number == ''){
-            alert("Number Cannot be Empty")
+            alert("Number cannot be empty")
             return
         }else if (bAddress == ''){
-            alert("Billing Address Cannot be Empty")
+            alert("Billing Address cannot be empty")
             return
         }else if (sAddress == ''){
-            alert("Shipping Address Cannot be Empty")
+            alert("Shipping Address cannot be empty")
+            return
+        }else if (cardName == ''){
+            
+            alert("Credit Card Name cannot be empty")
             return
         }else if (cardNumber == '' || cardNumber.length < 16){
             console.log("Card")
@@ -47,17 +52,15 @@ const CheckoutScreen = ( {navigation,route}) => {
     }
 
     return(
-        <View>
-            <Text>Contact Details</Text>
-
+        <View style={styles.mainContainer}>
+            <Text style={styles.heading}>Contact Details</Text>
             <TextInput
                 style={styles.inputStyle}
                 onChangeText={setName}
                 value={name}
-                maxLength={15}
+                maxLength={20}
                 placeholder='Enter Your Name'            
             />
-
             <TextInput
                 style={styles.inputStyle}
                 onChangeText={setNumber}
@@ -66,7 +69,6 @@ const CheckoutScreen = ( {navigation,route}) => {
                 maxLength={10}
                 placeholder='Enter Contact Number'            
             />
-
             <TextInput
                 style={styles.inputStyle}
                 onChangeText={setBAddress}
@@ -74,7 +76,6 @@ const CheckoutScreen = ( {navigation,route}) => {
                 maxLength={20}
                 placeholder='Enter Billing Address'            
             />
-
             <TextInput
                 style={styles.inputStyle}
                 onChangeText={setSAddress}
@@ -83,26 +84,31 @@ const CheckoutScreen = ( {navigation,route}) => {
                 placeholder='Enter Shipping Address'            
             />
             <Text></Text>
-            <Text>Card Details</Text>
+            <Text style={styles.heading}>Card Details</Text>
 
+            <TextInput
+                style={styles.inputStyle}
+                onChangeText={setCardName}
+                keyboardType={'numeric'}
+                value={cardName}
+                placeholder='Name on the Card'            
+            />
             <TextInput
                 style={styles.inputStyle}
                 onChangeText={setCardNum}
                 keyboardType={'numeric'}
                 value={cardNumber}
                 maxLength={16}
-                placeholder='Enter Card Number'            
+                placeholder='Card Number'            
             />
-
             <TextInput
                 style={styles.inputStyle}
                 onChangeText={setCardExpiryDate}
                 keyboardType={'numeric'}
                 value={cardExpiryDate}
                 maxLength={4}
-                placeholder='MMYY'            
+                placeholder='Expiry MMYY'            
             />
-
             {/* <DatePicker
                 onDateChange = { (dob) => {setBirthDate(dob);}}
                 date = {birthdate}
@@ -134,7 +140,6 @@ const CheckoutScreen = ( {navigation,route}) => {
                     }
                 } }
             /> */}
-
             <TextInput
                 style={styles.inputStyle}
                 onChangeText={setCardCVV}
@@ -142,11 +147,10 @@ const CheckoutScreen = ( {navigation,route}) => {
                 value={cardCVV}
                 secureTextEntry={true}
                 maxLength={3}
-                placeholder='CVV'            
+                placeholder='CVV Code'            
             />
-
-            <Button onPress={placeOrder}>Place Order</Button>
-
+            
+            <Button style={styles.buttonStyle} onPress={placeOrder}>Place Order</Button>
         </View>
     )
 }
@@ -154,9 +158,16 @@ const CheckoutScreen = ( {navigation,route}) => {
 export default CheckoutScreen
 
 const styles = StyleSheet.create({
+    mainContainer:{
+        flexDirection:'column',
+        // backgroundColor:'#ccc',
+        padding:15,
+        margin:10,
+        justifyContent:'flex-start'
+      },
     inputStyle: {
         height: 40,
-        fontSize: 20,
+        fontSize: 18,
         borderWidth: 1,
         borderColor: '#c1016b',
         marginVertical: 6,
@@ -181,6 +192,15 @@ const styles = StyleSheet.create({
         shadowRadius:8,
         height:400,
       },
+    heading:{
+        fontSize:18,
+        margin:5,
+        color:'#900C3F',
+    },
+    button:{
+        margin: 30,
+        padding: 10,
+    },
     btext_style:{
         fontWeight: 'bold'
     },

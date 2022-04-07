@@ -10,6 +10,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/drawer": "^6.4.1",
     "@react-navigation/native": "^6.0.8",
@@ -24,8 +25,9 @@
     "react-native-reanimated": "^1.13.4",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
+    "react-native-vector-icons": "^9.1.0",
     "react-native-web": "0.17.1",
-    "@react-native-async-storage/async-storage": "~1.15.0"
+    "expo-location": "~14.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

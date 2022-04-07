@@ -5,6 +5,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
 import { Text, ImageBackground, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
@@ -27,19 +28,46 @@ const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 function TapNav() {
-  return <Tab.Navigator>
-      <Tab.Screen name="Home" component={DrawerNavigator} 
-        options={{
-          headerShown:false,
-          title:'Shop'
-        }}
-      />
-      <Tab.Screen name="AccountScreen" component={AccountScreen} 
-              options={{
-                  title: 'Account Profile',
-              }}
-      />
+  return (
+      <Tab.Navigator
+        screenOptions={ ({route}) => ({
+            "tabBarActiveTintColor": "orangered",
+            "tabBarInactiveTintColor": "gray",
+            "tabBarStyle": [
+                {
+                "display": "flex"
+                },
+                null
+            ],
+            "tabBarIcon": ( {focused, color, size}) => {
+              let iconName;
+
+              if (route.name == "Home"){
+                iconName = focused ? 'home' : 'home'
+              }else if(route.name == "AccountScreen") {
+                iconName = focused ? 'user-circle' : 'user-circle-o'
+              }
+
+              return <Icon name={iconName} size={size} color={color} />;
+            }
+        }) }      
+      
+      >
+      
+      
+        <Tab.Screen name="Home" component={DrawerNavigator} 
+          options={{
+            headerShown:false,
+            title:'Shop'
+          }}
+        />
+        <Tab.Screen name="AccountScreen" component={AccountScreen} 
+                options={{
+                    title: 'Account Profile',
+                }}
+        />
   </Tab.Navigator>
+  )
 }
 
 function DrawerNavigator() {
