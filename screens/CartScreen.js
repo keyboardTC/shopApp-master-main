@@ -17,8 +17,7 @@ const CartScreen = ({navigation, route}) => {
     const cartItems = cartCtx.items
 
     useEffect ( () => {
-      // getCart()
-      removeData();
+      // getCartAstorage()
       console.log("CONTEXT FILE = > "+cartCtx.items)
     },[cartCtx.items, navigation])
 
@@ -26,21 +25,30 @@ const CartScreen = ({navigation, route}) => {
         //navigation.goBack();
         navigation.navigate("Checkout")
     }
-    const saveCartBtnHandler = () =>{
+    const saveCartBtnHandler = async () =>{
         // let value = cartItems
         // storeCart(cartItems)
-        // navigation.goBack();
+        console.log("saving context file = > "+cartCtx.items)
+        removeDataAstorage();
+        for (const item of cartCtx.items) {
+          console.log(`${item}`);
+          await storeCartAstorage(item);
+        }
+
+        // console.log("cart context "+cartCx.items);
+        // removeDataAstorage();
+        getCartAstorage()
     }
 
-
-    const getCart = async () => {
+    // Get Products from AsyncStorage cart 
+    const getCartAstorage = async () => {
       try {
         const data = await AsyncStorage.getItem(KEY);
         console.log(`data from AsyncStorage ${data}`);
         if(data !== null) {
-          // cartCtx.items = [],
-          console.log("what is happening here =====");
-
+          cartCtx.items = [],
+          console.log("what is happening here =====>");
+          // cartCtx.items = [];
           cartCtx.items = JSON.parse(data);
           // cartCtx.addItem(JSON.parse(data));
         }else{
@@ -50,22 +58,50 @@ const CartScreen = ({navigation, route}) => {
           console.error(e);
       }
     }
-    const removeData = async () => {
+
+    const removeDataAstorage = async () => {
       await AsyncStorage.removeItem(KEY);
+    }
+    const storeCartAstorage = async (product) => {
+      let cartPrutoductList = [];
+      try {
+        if (KEY in AsyncStorage) {
+          // const destinationList = JSON.parse(AsyncStorage.getItem(KEY));
+          // var indexOfObject = destinationList.findIndex(elem => elem.Id === product.Id);
+  
+      
+            //Add new Product to Existing my_cart in local storage
+            for (const item of cartCtx.items) {
+              console.log(`${item}`);
+              cartPrutoductList.push(item);
+            }
+
+
+          AsyncStorage.setItem(KEY, JSON.stringify(cartPrutoductList));
+          
+        }else{
+          for (const item of cartCtx.items) {
+            console.log(`${item}`);
+            cartPrutoductList.push(item);
+          }
+          AsyncStorage.setItem(KEY, JSON.stringify(cartPrutoductList));
+        }
+      } catch (e) {
+        console.log('Eror saving cart '+e);
+      }
     }
 
 
   return (
-    <ScrollView>
+    <View>
         <View>
             <CartItem/>
         </View>
-      {/* <PriceSummary/> */}
       <View style={styles.btnContainer}>
         <Button onPress={saveCartBtnHandler}>save cart</Button>
         <Button onPress={backBtnHandler}>checkout</Button>
       </View>
-    </ScrollView>
+    </View>
   )
 }
 

@@ -1,17 +1,15 @@
 import { StyleSheet, Text, View, Image, ScrollView} from 'react-native'
 import { FlatList } from 'react-native-gesture-handler';
 import {useState, useContext, useEffect} from 'react'
-import Button from './ui/Button';
-import IconButton from './ui/IconButton';
 import { CartContext } from '../context/cart-context';
 import SingleFlatItem from './SingleFlatItem';
 import { useNavigation } from '@react-navigation/native';
 
 
 const CartItem = () => {
-    const navigation = useNavigation();
     const cartCtx = useContext(CartContext);
     const [total, setTotal] = useState(0.0);
+    const [emptyCart, setEmptyCart] = useState(false);
     const [discount, setDiscount] = useState(0.0);
     const [discountp, setDiscountp] = useState('');
     const [tax, setTax] = useState(0.0);
@@ -57,56 +55,66 @@ const CartItem = () => {
         
           console.log("==== moving to single item component ===== ")
         return (
-            <SingleFlatItem item={item} calSubTotal={calSubTotal} setTotal={setTotal} deleteItemHandler={deleteItemHandler} />
+            <SingleFlatItem item={item} calSubTotal={calSubTotal} setTotal={setTotal} deleteItemHandler={deleteItemHandler} setEmptyCart={setEmptyCart} emptyCart={emptyCart} />
         )
     };
 
   return (
-    <View>
-        <View style={styles.mainContainer}>
+    <>
+        <View style={[styles.mainContainer, !emptyCart && styles.mainEmpty]}>
             <FlatList
                 data= {cartCtx.items}
                 keyExtractor = { (item) => {return item.Id}}
                 renderItem = { renderItem }
                 // extraData = {cartCtx.items}
             />
+            {!emptyCart && <Text style={styles.emptyCartText}>EMPTY CART</Text>}
+
         </View>
-        <View>
-            <View style={styles.smainContainer}>
-                <View style={styles.sectionContainer}>
-                    <Text>Total:</Text>
-                    <Text>$ {total}</Text>
-                </View>
-                <View style={styles.sectionContainer}>
-                    <Text>Discount ({discountp})</Text>
-                    <Text>- $ {discount}</Text>
-                </View>
-                <View style={styles.sectionContainer}>
-                    <Text>Tax</Text>
-                    <Text>$ {tax}</Text>
-                </View>
-                <View style={[styles.sectionContainer, styles.finalPriceContainer]}>
-                    <Text>Final Total:</Text>
-                    <Text>$ {finalTotal}</Text>
-                </View>
-            </View>            
-        </View>
-    </View>
+        <View style={styles.smainContainer}>
+            <View style={styles.sectionContainer}>
+                <Text>Total:</Text>
+                <Text>$ {total}</Text>
+            </View>
+            <View style={styles.sectionContainer}>
+                <Text>Discount ({discountp})</Text>
+                <Text>- $ {discount}</Text>
+            </View>
+            <View style={styles.sectionContainer}>
+                <Text>Tax</Text>
+                <Text>$ {tax}</Text>
+            </View>
+            <View style={[styles.sectionContainer, styles.finalPriceContainer]}>
+                <Text>Final Total:</Text>
+                <Text>$ {finalTotal}</Text>
+            </View>
+        </View>            
+    </>
+
   )
 }
 
 export default CartItem
 
 const styles = StyleSheet.create({
-
+    mainEmpty:{
+        paddingHorizontal:20,
+        marginVertical:20,
+        backgroundColor:'#ccc',
+        height:100,
+        justifyContent:'center',
+        alignContent:'center',
+        alignItems:'center'
+    },
     mainContainer:{
         flexDirection:'row',
-        borderBottomWidth:10,
-        borderTopWidth:10,
+        // borderBottomWidth:10,
+        // borderTopWidth:10,
         borderColor:'green',
-        padding:10,
+        paddingHorizontal:20,
         marginVertical:20,
-        backgroundColor:'green',
+        backgroundColor:'#ccc',
+        height:380,
     },
     smainContainer:{
         margin:20,
@@ -126,6 +134,9 @@ const styles = StyleSheet.create({
         paddingTop:10,
         borderTopColor:'black',
         borderTopWidth:2,
+    },
+    emptyCartText:{
+        fontSize: 30,
+        fontWeight:'bold',
     }
-
-})
+});

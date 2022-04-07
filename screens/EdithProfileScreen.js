@@ -28,6 +28,7 @@ const EdithProfileScreen = ({navigation, route}) => {
         console.log("Email => "+email)
         console.log("PhoneNum => "+phoneValue)
         await editUser(email, phoneValue, uid)
+        authCtx.toggleChange()
     }
   return (
     <View style={styles.inputContainer}>

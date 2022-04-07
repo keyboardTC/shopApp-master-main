@@ -3,9 +3,8 @@ import { doc, updateDoc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { getAuth, deleteUser } from "firebase/auth";
 import Item from "../../../model/Item";
 import User from "../../../model/User";
-import { AuthContext } from "../../../context/auth-context";
 import { auth } from "./firebase_config";
-import { useContext} from 'react'
+
 
 
 // Firestore User converter

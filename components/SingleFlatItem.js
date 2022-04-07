@@ -6,7 +6,7 @@ import { CartContext } from '../context/cart-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../context/auth-context';
 
-const SingleFlatItem = ({item, calSubTotal, setTotal, deleteItemHandler}) => {
+const SingleFlatItem = ({item, calSubTotal, setTotal, deleteItemHandler, setEmptyCart, emptyCart}) => {
   const cartCtx = useContext(CartContext);
   const authCtx = useContext(AuthContext);
   const KEY = 'cart-'+authCtx.uid;
@@ -21,12 +21,16 @@ const SingleFlatItem = ({item, calSubTotal, setTotal, deleteItemHandler}) => {
       console.log("**** Total is ===== > "+total);
       setTotal(total);
       calSubTotal(total);
+      return total
     }
 
     useEffect(() => {
-      // DidLoad
-      (async () =>{  
-        calculatePrice()
+      (async () =>{ 
+        if (calculatePrice() == 0 || calculatePrice() == 0.00) {
+          setEmptyCart(false);
+        }else{
+          setEmptyCart(true);
+        }
       })();
     }, [cartCtx]);
 
@@ -38,7 +42,6 @@ const SingleFlatItem = ({item, calSubTotal, setTotal, deleteItemHandler}) => {
             ++cartCtx.items[itemInCartIndex].Available 
             cartCtx.toggleChange
             calculatePrice()
-            updatLocalProds(item);
             return ++itemQuantity
           }
         });
@@ -51,14 +54,22 @@ const SingleFlatItem = ({item, calSubTotal, setTotal, deleteItemHandler}) => {
             --cartCtx.items[itemInCartIndex].Available 
             cartCtx.toggleChange
             calculatePrice()
-            updatLocalProds(item);
             return --itemQuantity
           }
         });
     }
 
-      // ==== Updating product in local storage ===============
-    function updatLocalProds(item) {
+    function mydeleteItemHandler() {
+      // cartCtx.items.splice(itemInCartIndex,1);
+      deleteItemHandler(itemInCartIndex)
+      // removeProduct(item);
+      cartCtx.toggleChange()
+      calculatePrice() 
+      // setItemQuantity(0)
+    }
+    
+    // ==== Updating product in local storage ===============
+    function updatLocalProdAstorage(item) {
       
       if (KEY in AsyncStorage) {
           const productList = JSON.parse(AsyncStorage.getItem(KEY));
@@ -80,38 +91,29 @@ const SingleFlatItem = ({item, calSubTotal, setTotal, deleteItemHandler}) => {
       }
     }
 
-
-    function mydeleteItemHandler() {
-      // cartCtx.items.splice(itemInCartIndex,1);
-      deleteItemHandler(itemInCartIndex)
-      // removeProduct(item);
-      cartCtx.toggleChange()
-      calculatePrice() 
-      // setItemQuantity(0)
-    }
-
     // ===== Get Products from AsyncStorage cart ==
-    async function getCartProducts() {
-      let cart;
-      try {
-        const data = await AsyncStorage.getItem(KEY);
-        console.log(`data from AsyncStorage ${data}`);
-        if(data !== null) {
-          // cartCtx.items = [],
-          console.log("what is happening here =====");
+    // async function getCartProductsAstorage() {
+    //   let cart;
+    //   try {
+    //     const data = await AsyncStorage.getItem(KEY);
+    //     console.log(`data from AsyncStorage ${data}`);
+    //     if(data !== null) {
+    //       // cartCtx.items = [],
+    //       console.log("what is happening here =====");
 
-          cart = data
-          // cartCtx.addItem(JSON.parse(data));
-        }else{
-          console.log("NOTHING IN Async =====")
-        }
-      } catch(e) {
-          console.error(e);
-      }
-      return cart;
-    }
-    function removeProduct(item) {
-      const productL = getCartProducts();
+    //       cart = data
+    //       // cartCtx.addItem(JSON.parse(data));
+    //     }else{
+    //       console.log("NOTHING IN Async =====")
+    //     }
+    //   } catch(e) {
+    //       console.error(e);
+    //   }
+    //   return cart;
+    // }
+
+    function removeProductAstorage(item) {
+      const productL = getCartProductsAstorage();
       if (productL) {
         productL.forEach((product, index) => {
           if (product.Id === item.Id) {
@@ -130,8 +132,8 @@ const SingleFlatItem = ({item, calSubTotal, setTotal, deleteItemHandler}) => {
                 <Image style={styles.imgContainer} source = { {uri: item.Image} }/>
             </View>
             <View style={styles.titleContainer}>
-                <Text>{item.Title}</Text>
-                <Text>{item.Price}</Text>
+                <Text style={styles.titleText}>{item.Title}</Text>
+                <Text style={styles.titleText}>$ {item.Price}</Text>
             </View>            
         </View>
         <View style={styles.quantityContainer}>
@@ -156,28 +158,39 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         marginVertical:10,
         justifyContent:'space-between',
+        borderWidth:5,
+        borderColor:'#915f6d',
     },
     quantityContainer:{
         flexDirection:'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor:'#ccc',
+        // backgroundColor:'#ccc',
         width:140,
-        // marginHorizontal:10,
     },
     imgContainer:{
         backgroundColor:'blue',
         height:60,
         width:80,
         borderColor:'black',
+        
     },
     titleContainer:{
-        backgroundColor:'orange',
+        // backgroundColor:'orange',
         marginHorizontal:10,
         width:120,
+        elevation: 50,
+        shadowColor:'black',
+        shadowOpacity:0.25,
+        shadowOffset:{width:0, height: 20},
+        shadowRadius:8,
+
     },
     itemdetail:{
         flexDirection:'row',
-        
+    },
+    titleText:{
+      fontWeight: 'bold',
+      fontSize:18,
     }
 })

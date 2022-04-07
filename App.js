@@ -4,13 +4,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
-import { Text } from 'react-native';
+import { Text, ImageBackground, StyleSheet } from 'react-native';
 
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import ShopScreen from './screens/ShopScreen';
 import { Colors } from './constants/styles';
 import { AuthContext } from './context/auth-context';
+import { CartContext } from './context/cart-context';
 import CartContextProvider from './context/cart-context';
 import AuthContextProvider from './context/auth-context';
 import IconButton from './components/ui/IconButton';
@@ -72,6 +73,7 @@ function AuthStack() {
 
 function AuthenticatedStack() {
   const authCtx = useContext(AuthContext);
+  const cartCtx = useContext(CartContext);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -127,10 +129,12 @@ function Navigation() {
   const authCtx = useContext(AuthContext);
   return (
     <NavigationContainer>
-      {/* <AuthStack /> */}
-      {/* <AuthenticatedStack/> */}
-      {!authCtx.isAuthenticated && <AuthStack />}
-      {authCtx.isAuthenticated && <AuthenticatedStack/>}
+
+        {/* <AuthStack /> */}
+        {/* <AuthenticatedStack/> */}
+        {!authCtx.isAuthenticated && <AuthStack />}
+        {authCtx.isAuthenticated && <AuthenticatedStack/>}
+
     </NavigationContainer>
   );
 }
@@ -149,3 +153,14 @@ export default function App() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  rootScreen: {
+    flex: 1,
+    height:200,
+    width:'100%'
+  },
+  backgroundImage: {
+    opacity:0.15
+  }
+})

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, StyleSheet, View, ScrollView } from 'react-native';
+import { Alert, StyleSheet, View, ScrollView, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import FlatButton from '../ui/FlatButton';
@@ -64,18 +64,25 @@ function AuthContent({ isLogin, onAuthenticate, signInHandler }) {
   }
 
   return (
-    <ScrollView style={styles.authContent}>
-      <AuthForm
-        isLogin={isLogin}
-        onSubmit={submitHandler}
-        credentialsInvalid={credentialsInvalid}
-      />
-      <View style={styles.buttons}>
-        <FlatButton onPress={switchAuthModeHandler}>
-          {isLogin ? 'Create a new user' : 'Log in instead'}
-        </FlatButton>
-      </View>
-    </ScrollView>
+      <ImageBackground 
+        source={require('../../assets/background.jpg')} 
+        resizeMode="cover"
+        style={styles.rootScreen}
+        imageStyle={styles.backgroundImage}
+      >
+        <ScrollView style={styles.authContent}>
+            <AuthForm
+              isLogin={isLogin}
+              onSubmit={submitHandler}
+              credentialsInvalid={credentialsInvalid}
+            />
+            <View style={styles.buttons}>
+              <FlatButton onPress={switchAuthModeHandler}>
+                {isLogin ? 'Create a new user' : 'Log in instead'}
+              </FlatButton>
+            </View>
+        </ScrollView>
+      </ImageBackground>
   );
 }
 
@@ -97,4 +104,12 @@ const styles = StyleSheet.create({
   buttons: {
     marginTop: 8,
   },
+  rootScreen: {
+    flex: 1,
+    height:800,
+    width:'100%'
+  },
+  backgroundImage: {
+    opacity:0.87,
+  }
 });

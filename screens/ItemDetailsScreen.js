@@ -5,18 +5,27 @@ import Button from '../components/ui/Button';
 import { CartContext } from '../context/cart-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../context/auth-context';
+// import { ItemsContext } from '../context/items-context';
 
 const ItemDetailsScreen = ({navigation, route}) => {
   const cartCtx = useContext(CartContext);
   const authCtx = useContext(AuthContext);
+  const ItemsArr = useContext(ItemsContext);
   const KEY = 'cart-'+authCtx.uid;
   const id = route.params.itemId;
   console.log("ID SENT TO DETAILS : "+id);
   const ITEMS = useContext(ItemsContext);
   const allItems = ITEMS.items
+  let itemInCart;
+  let itemInCartIndex
   const itemSelected = allItems.find(item => item.Id == id);
-  const itemInCart = cartCtx.items.find(item => item.Id == itemSelected.Id);
-  const itemInCartIndex = cartCtx.items.findIndex(item => item.Id == itemSelected.Id);
+  const itemInArr = ItemsArr.items.find(item => item.Id == itemSelected.Id);
+  const itemInArrIndex = ItemsArr.items.findIndex(item => item.Id == itemSelected.Id);
+  if (cartCtx.items) {
+    console.log("CART context problemssss "+cartCtx.items)
+     itemInCart = cartCtx.items.find(item => item.Id == itemSelected.Id);
+     itemInCartIndex = cartCtx.items.findIndex(item => item.Id == itemSelected.Id);
+  }
   let [itemQuantity, setItemQuantity] = useState(Number(itemSelected.Available));
   let cartPrutoductList = new Array();
 
@@ -28,7 +37,7 @@ const ItemDetailsScreen = ({navigation, route}) => {
 
 
   // Add to cart handler and checking if item quantity is less than 1
-  const addHandler = ()=>{
+  const addHandler = async ()=>{
     console.log("=== ITEM IN CART =? "+itemInCart)
     setItemQuantity(()=>{
       if (itemQuantity < 1) {
@@ -41,11 +50,12 @@ const ItemDetailsScreen = ({navigation, route}) => {
           console.log("ADDED TO CART");
           cartCtx.items.push(itemSelected)
         }
-        storeCart(itemInCart)
+        // storeCart(itemInCart)
         console.log("Cart Items : "+cartCtx.items)
         return --itemQuantity
       }
     });
+    storeCart(itemSelected)
   }
 
   const storeCart = async (product) => {
@@ -74,6 +84,29 @@ const ItemDetailsScreen = ({navigation, route}) => {
       console.log('Eroor saving cart '+e);
     }
   }
+
+      // // Get Products from AsyncStorage cart 
+      // const getCartAstorage = async () => {
+      //   try {
+      //     const data = await AsyncStorage.getItem(KEY);
+      //     console.log(`data from AsyncStorage ${data}`);
+      //     if(data !== null) {
+      //       // cartCtx.items = [],
+      //       console.log("what is happening here =====>");
+      //       // cartCtx.items = [];
+      //       cartCtx.items = JSON.parse(data);
+      //       // cartCtx.addItem(JSON.parse(data));
+      //     }else{
+      //       console.log("NOTHING IN Async =====")
+      //     }
+      //   } catch(e) {
+      //       console.error(e);
+      //   }
+      // }
+  
+      // const removeDataAstorage = async () => {
+      //   await AsyncStorage.removeItem(KEY);
+      // }
 
   const continueHandler = ()=>{
     navigation.navigate("Welcome");

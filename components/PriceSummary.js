@@ -20,8 +20,8 @@ const PriceSummary = () => {
             <Text>$ 10</Text>
         </View>
         <View style={[styles.sectionContainer, styles.finalPriceContainer]}>
-            <Text>Final Total:</Text>
-            <Text>$ 30</Text>
+            <Text style={styles.titleText}>Final Total:</Text>
+            <Text style={styles.titleText}>$ 30</Text>
         </View>
     </View>
   )
@@ -48,5 +48,9 @@ const styles = StyleSheet.create({
         paddingTop:10,
         borderTopColor:'black',
         borderTopWidth:2,
-    }
-})
+    },
+    titleText:{
+        fontWeight: 'bold',
+        fontSize:18,
+    },
+});

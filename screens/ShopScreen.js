@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 import { ItemsContext } from '../context/items-context';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
-import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+
 
 function ShopScreen(props) {
 
@@ -39,7 +39,7 @@ function ShopScreen(props) {
       )
       setIsloaded(false);
     })();
-  }, [ItemsArr, navigation, route?.params]);
+  }, [ItemsArr, navigation, route?.params ]);
 
   if (isloaded) {
     console.log("locations are loading");
